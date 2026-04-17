@@ -1,0 +1,17 @@
+.git
+.codex
+.env
+.env.*
+!.env.example
+node_modules
+apps/*/node_modules
+packages/*/node_modules
+dist
+apps/*/dist
+.next
+apps/*/.next
+coverage
+*.log
+tmp
+uploads
+

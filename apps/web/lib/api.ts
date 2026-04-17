@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
+const API_URL = process.env.SERVER_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api';
 
 export type DashboardStats = {
   documents: number;
@@ -26,4 +26,3 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export { API_URL };
-

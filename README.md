@@ -52,7 +52,21 @@ Web: `http://localhost:3000`
 
 Documentacao Swagger: `http://localhost:4000/api/docs`
 
+Credenciais demo criadas no startup Docker:
+
+- Camara: `camara-demo`
+- E-mail: `admin@legisflow.local`
+- Senha: `Admin@123456`
+
+Portas Docker locais para servicos de apoio:
+
+- PostgreSQL: `localhost:55432`
+- Redis: `localhost:56379`
+- MinIO API: `http://localhost:59000`
+- MinIO Console: `http://localhost:59001`
+- Nginx HTTP: `http://localhost:8080`
+- Nginx HTTPS: `https://localhost:8443`
+
 ## Producao
 
 Use `docker compose up -d --build` para subir PostgreSQL, Redis, MinIO, API, web e Nginx. Configure TLS real no Nginx ou em proxy externo da VPS.
-
