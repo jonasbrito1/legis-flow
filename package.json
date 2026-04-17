@@ -1,0 +1,23 @@
+{
+  "name": "legis-flow",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@legisflow/api & npm run dev --workspace=@legisflow/web",
+    "build": "npm run build --workspace=@legisflow/api && npm run build --workspace=@legisflow/web",
+    "lint": "npm run lint --workspace=@legisflow/api && npm run lint --workspace=@legisflow/web",
+    "prisma:generate": "npm run prisma:generate --workspace=@legisflow/database",
+    "prisma:migrate": "npm run prisma:migrate --workspace=@legisflow/database",
+    "prisma:studio": "npm run prisma:studio --workspace=@legisflow/database"
+  },
+  "overrides": {
+    "rxjs": "7.8.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

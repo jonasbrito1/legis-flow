@@ -1,0 +1,262 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  SERVIDOR
+  VEREADOR
+  PUBLICO
+}
+
+enum LegislativeStatus {
+  DRAFT
+  PROTOCOLLED
+  IN_REVIEW
+  VOTING
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
+enum VoteChoice {
+  YES
+  NO
+  ABSTAIN
+}
+
+enum RequestStatus {
+  OPEN
+  IN_PROGRESS
+  ANSWERED
+  OVERDUE
+  CLOSED
+}
+
+enum ProcessStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING
+  CLOSED
+  ARCHIVED
+}
+
+enum FileVisibility {
+  PRIVATE
+  INTERNAL
+  PUBLIC
+}
+
+model Tenant {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  city        String
+  state       String
+  cnpj        String?  @unique
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users                 User[]
+  sectors               Sector[]
+  legislativeDocuments  LegislativeDocument[]
+  plenarySessions       PlenarySession[]
+  administrativeProcesses AdministrativeProcess[]
+  esicRequests          EsicRequest[]
+  files                 FileObject[]
+  auditLogs             AuditLog[]
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String
+  email        String
+  passwordHash String
+  name         String
+  role         Role     @default(PUBLICO)
+  sectorId     String?
+  isActive     Boolean  @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sector Sector? @relation(fields: [sectorId], references: [id])
+  votes  Vote[]
+  auditLogs AuditLog[]
+  files FileObject[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId, role])
+}
+
+model Sector {
+  id        String   @id @default(uuid())
+  tenantId  String
+  name      String
+  acronym   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  users User[]
+  processes AdministrativeProcess[]
+
+  @@unique([tenantId, acronym])
+}
+
+model LegislativeDocument {
+  id          String   @id @default(uuid())
+  tenantId    String
+  number      String
+  year        Int
+  type        String
+  title       String
+  summary     String
+  author      String
+  status      LegislativeStatus @default(DRAFT)
+  protocol    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  movements LegislativeMovement[]
+  votes Vote[]
+  files FileObject[]
+
+  @@unique([tenantId, number, year, type])
+  @@index([tenantId, status])
+}
+
+model LegislativeMovement {
+  id          String   @id @default(uuid())
+  documentId  String
+  fromSector  String?
+  toSector    String
+  action      String
+  description String
+  createdAt   DateTime @default(now())
+
+  document LegislativeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+}
+
+model PlenarySession {
+  id        String   @id @default(uuid())
+  tenantId  String
+  title     String
+  date      DateTime
+  agenda    String
+  minutes   String?
+  isClosed  Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  votes Vote[]
+}
+
+model Vote {
+  id         String @id @default(uuid())
+  tenantId   String
+  sessionId  String
+  documentId String
+  userId     String
+  choice     VoteChoice
+  createdAt  DateTime @default(now())
+
+  session PlenarySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  document LegislativeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, documentId, userId])
+}
+
+model AdministrativeProcess {
+  id          String @id @default(uuid())
+  tenantId    String
+  sectorId    String?
+  protocol    String
+  subject     String
+  description String
+  status      ProcessStatus @default(OPEN)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sector Sector? @relation(fields: [sectorId], references: [id])
+  files FileObject[]
+
+  @@unique([tenantId, protocol])
+}
+
+model EsicRequest {
+  id             String @id @default(uuid())
+  tenantId       String
+  protocol       String
+  requesterName  String
+  requesterEmail String
+  subject        String
+  description    String
+  status         RequestStatus @default(OPEN)
+  dueDate        DateTime
+  answer         String?
+  answeredAt     DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  files FileObject[]
+
+  @@unique([tenantId, protocol])
+  @@index([tenantId, status, dueDate])
+}
+
+model FileObject {
+  id          String @id @default(uuid())
+  tenantId    String
+  ownerId     String?
+  documentId  String?
+  processId   String?
+  esicId      String?
+  filename    String
+  mimeType    String
+  size        Int
+  storageKey  String
+  checksum    String?
+  version     Int @default(1)
+  visibility  FileVisibility @default(INTERNAL)
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  owner User? @relation(fields: [ownerId], references: [id])
+  document LegislativeDocument? @relation(fields: [documentId], references: [id])
+  process AdministrativeProcess? @relation(fields: [processId], references: [id])
+  esic EsicRequest? @relation(fields: [esicId], references: [id])
+
+  @@index([tenantId, storageKey])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  tenantId  String
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  ip        String?
+  userAgent String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, action, createdAt])
+}
+

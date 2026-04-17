@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+.codex
+node_modules
+dist
+.next
+coverage
+*.log
+tmp
+uploads
+packages/database/generated
