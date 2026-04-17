@@ -1,18 +1,14 @@
 import { Sidebar } from '../../components/sidebar';
 import { StatCard } from '../../components/stat-card';
-import { API_URL, type DashboardStats } from '../../lib/api';
+import type { DashboardStats } from '../../lib/api';
+import { requireAccessToken, serverApi } from '../../lib/server-api';
 
 async function getStats(): Promise<DashboardStats> {
-  try {
-    const response = await fetch(`${API_URL}/dashboard`, { cache: 'no-store' });
-    if (!response.ok) throw new Error('unauthorized');
-    return response.json();
-  } catch {
-    return { documents: 0, sessions: 0, processes: 0, esicOpen: 0, files: 0 };
-  }
+  return serverApi<DashboardStats>('/dashboard');
 }
 
 export default async function DashboardPage() {
+  await requireAccessToken();
   const stats = await getStats();
 
   return (
@@ -44,26 +40,26 @@ export default async function DashboardPage() {
         </section>
 
         <section className="grid modules">
-          <article className="card" id="legislativo">
+          <a className="card module-link" href="/legislativo" id="legislativo">
             <h2>Legislativo</h2>
             <p className="muted">Projetos de lei, tramitacoes, sessoes, atas, votacoes e historico completo.</p>
-          </article>
-          <article className="card" id="administrativo">
+          </a>
+          <a className="card module-link" href="/administrativo" id="administrativo">
             <h2>Administrativo</h2>
             <p className="muted">Processos internos, setores, protocolo digital e gestao documental.</p>
-          </article>
-          <article className="card" id="esic">
+          </a>
+          <a className="card module-link" href="/esic" id="esic">
             <h2>e-SIC</h2>
             <p className="muted">Solicitacoes publicas, controle de prazos, respostas e acompanhamento.</p>
-          </article>
-          <article className="card" id="arquivos">
+          </a>
+          <a className="card module-link" href="/arquivos" id="arquivos">
             <h2>Arquivos</h2>
             <p className="muted">Upload, versionamento, armazenamento S3 e controle de acesso.</p>
-          </article>
-          <article className="card" id="usuarios">
+          </a>
+          <a className="card module-link" href="/usuarios" id="usuarios">
             <h2>Usuarios</h2>
             <p className="muted">Perfis por papel, permissoes por modulo e logs de auditoria.</p>
-          </article>
+          </a>
           <article className="card">
             <h2>SaaS</h2>
             <p className="muted">Modelo multi-tenant preparado para expandir para varias camaras.</p>

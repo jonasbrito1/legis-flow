@@ -57,6 +57,9 @@ legis-flow/
 ### Autenticacao e seguranca
 
 - Login por tenant usando `tenantSlug`, e-mail e senha.
+- Pagina `/login` conectada ao backend por rota segura do Next.
+- Sessao web com cookie `access_token` httpOnly.
+- Logout pela barra lateral.
 - JWT assinado com `JWT_SECRET`.
 - Cookie `access_token` httpOnly.
 - Helmet, CORS configuravel e validacao global por DTO.
@@ -77,15 +80,18 @@ legis-flow/
 ### Legislativo
 
 - Cadastro de documentos legislativos.
+- Pagina `/legislativo` com formulario e listagem.
 - Protocolo de projetos/documentos.
 - Tramitação por movimentacoes.
 - Sessoes plenarias.
+- Cadastro de sessoes plenarias pela interface.
 - Registro de votos por vereador.
 - Historico de movimentacoes por documento.
 
 ### Administrativo
 
 - Cadastro e listagem de processos internos.
+- Pagina `/administrativo` com processos e setores.
 - Geracao de protocolo administrativo.
 - Vinculo opcional com setores.
 - Estrutura para gestao documental.
@@ -93,6 +99,8 @@ legis-flow/
 ### e-SIC
 
 - Abertura publica de solicitacoes.
+- Portal publico `/solicitacoes` conectado ao endpoint real.
+- Painel administrativo `/esic` com listagem e resposta de demandas.
 - Consulta publica por protocolo.
 - Listagem administrativa por tenant.
 - Resposta administrativa e encerramento da demanda.
@@ -101,6 +109,7 @@ legis-flow/
 ### Usuarios e setores
 
 - Criacao de usuarios por administrador.
+- Pagina `/usuarios` com formulario e listagem.
 - Listagem de usuarios por tenant.
 - Cadastro e listagem de setores.
 - Vinculo de usuarios a setores.
@@ -108,8 +117,10 @@ legis-flow/
 ### Arquivos
 
 - Upload via API.
+- Pagina `/arquivos` com upload e listagem.
 - Armazenamento em S3 compativel.
 - MinIO para ambiente local.
+- Bucket MinIO criado automaticamente pelo servico `minio-init`.
 - Metadados no PostgreSQL.
 - Versionamento por nome de arquivo.
 - Vinculo com documento legislativo, processo administrativo ou solicitacao e-SIC.
@@ -122,6 +133,38 @@ legis-flow/
   - Processos internos
   - Solicitações e-SIC abertas
   - Arquivos digitais
+- Cards do dashboard navegam para paginas reais dos modulos.
+- Menu lateral navega por rotas reais:
+  - `/dashboard`
+  - `/legislativo`
+  - `/administrativo`
+  - `/esic`
+  - `/arquivos`
+  - `/usuarios`
+
+## Estado funcional atual
+
+Ja e possivel navegar e operar os fluxos principais pela interface:
+
+- Fazer login pela pagina `/login`.
+- Acessar dashboard autenticado.
+- Cadastrar e listar documentos legislativos.
+- Cadastrar e listar sessoes plenarias.
+- Cadastrar setores.
+- Cadastrar e listar processos administrativos.
+- Abrir solicitacao publica e-SIC.
+- Listar e responder solicitacoes e-SIC no painel administrativo.
+- Cadastrar e listar usuarios.
+- Enviar e listar arquivos digitais usando MinIO.
+
+Ainda existem evolucoes planejadas para transformar a base em produto final completo:
+
+- Edicao, exclusao e filtros avancados em todas as telas.
+- Fluxo visual completo de tramitacao por setores.
+- Tela de votacao plenaria em tempo real.
+- Permissoes finas por modulo.
+- Refresh token e revogacao de sessoes.
+- Testes automatizados e pipeline CI.
 
 ## Infraestrutura local
 
@@ -130,6 +173,7 @@ Servicos definidos no Docker Compose:
 - `postgres`: banco PostgreSQL 16
 - `redis`: cache Redis 7
 - `minio`: armazenamento S3 local
+- `minio-init`: criacao idempotente do bucket local
 - `api`: backend NestJS
 - `web`: frontend Next.js
 - `nginx`: proxy reverso para web e API
@@ -228,6 +272,13 @@ docker compose logs -f web
 - Prisma Client gerado com sucesso.
 - Build local da API e da Web executado com sucesso.
 - `npm audit --omit=dev` retornou zero vulnerabilidades no momento da criacao da base.
+- Docker Compose subiu API, Web, PostgreSQL, Redis, MinIO, MinIO init e Nginx.
+- Login web validado com cookie httpOnly.
+- Rotas `/legislativo`, `/administrativo`, `/esic`, `/arquivos` e `/usuarios` abriram autenticadas.
+- Criacao de solicitacao e-SIC validada pela interface Next.
+- Criacao de documento legislativo validada pela interface Next.
+- Criacao de processo administrativo validada pela interface Next.
+- Upload de arquivo validado com bucket MinIO local.
 
 ## Estado atual do Git
 
@@ -239,9 +290,10 @@ Remoto:
 
 - `origin git@github.com:jonasbrito1/legis-flow.git`
 
-Commit inicial:
+Commits principais:
 
 - `e2eed95 feat: scaffold LegisFlow SaaS platform`
+- `ed1cf5c chore: enable local docker runtime and system memory`
 
 Regra operacional definida pelo usuario:
 
@@ -250,12 +302,11 @@ Regra operacional definida pelo usuario:
 ## Proximos passos recomendados
 
 - Criar migrations Prisma versionadas em vez de depender apenas do schema.
-- Adicionar seed automatizado no fluxo Docker.
 - Implementar refresh token e revogacao de sessoes com Redis.
 - Criar permissoes finas por modulo alem do papel global.
-- Conectar o formulario publico e-SIC do frontend ao endpoint real.
-- Implementar tela de login com chamada real para `/auth/login`.
-- Criar telas CRUD dos modulos legislativo, administrativo, usuarios e arquivos.
+- Criar edicao, exclusao, filtros e paginacao nos modulos.
+- Criar fluxo visual completo de tramitacao legislativa.
+- Criar interface de votacao plenaria.
 - Configurar HTTPS real com Let's Encrypt na VPS.
 - Adicionar pipeline CI com build, lint, audit e testes.
 - Adicionar testes unitarios e e2e.

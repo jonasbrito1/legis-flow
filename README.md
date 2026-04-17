@@ -52,6 +52,17 @@ Web: `http://localhost:3000`
 
 Documentacao Swagger: `http://localhost:4000/api/docs`
 
+Rotas web:
+
+- `/login`: acesso autenticado
+- `/dashboard`: indicadores
+- `/legislativo`: documentos e sessoes
+- `/administrativo`: processos e setores
+- `/esic`: painel de solicitacoes
+- `/solicitacoes`: portal publico e-SIC
+- `/arquivos`: upload e listagem
+- `/usuarios`: usuarios e perfis
+
 Credenciais demo criadas no startup Docker:
 
 - Camara: `camara-demo`
