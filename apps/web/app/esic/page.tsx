@@ -45,7 +45,7 @@ export default async function EsicAdminPage() {
                   <span className="muted">Prazo: {new Date(request.dueDate).toLocaleDateString('pt-BR')}</span>
                   {request.answer ? <p><strong>Resposta:</strong> {request.answer}</p> : null}
                 </div>
-                <form className="inline-answer" action="/api/esic/answer" method="post">
+                <form className="inline-answer" action="/actions/esic/answer" method="post">
                   <input type="hidden" name="id" value={request.id} />
                   <label htmlFor={`answer-${request.id}`}>Resposta</label>
                   <textarea id={`answer-${request.id}`} name="answer" placeholder="Registre a resposta oficial" required />

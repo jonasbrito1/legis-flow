@@ -60,6 +60,7 @@ legis-flow/
 - Pagina `/login` conectada ao backend por rota segura do Next.
 - Sessao web com cookie `access_token` httpOnly.
 - Logout pela barra lateral.
+- Formularios da interface usam rotas `/actions/...` do Next para evitar conflito com o proxy `/api/...` do backend.
 - JWT assinado com `JWT_SECRET`.
 - Cookie `access_token` httpOnly.
 - Helmet, CORS configuravel e validacao global por DTO.
@@ -274,6 +275,7 @@ docker compose logs -f web
 - `npm audit --omit=dev` retornou zero vulnerabilidades no momento da criacao da base.
 - Docker Compose subiu API, Web, PostgreSQL, Redis, MinIO, MinIO init e Nginx.
 - Login web validado com cookie httpOnly.
+- Login validado via Nginx com redirect relativo para `/dashboard`.
 - Rotas `/legislativo`, `/administrativo`, `/esic`, `/arquivos` e `/usuarios` abriram autenticadas.
 - Criacao de solicitacao e-SIC validada pela interface Next.
 - Criacao de documento legislativo validada pela interface Next.
@@ -294,6 +296,7 @@ Commits principais:
 
 - `e2eed95 feat: scaffold LegisFlow SaaS platform`
 - `ed1cf5c chore: enable local docker runtime and system memory`
+- `346acc5 feat: add authenticated module pages`
 
 Regra operacional definida pelo usuario:
 

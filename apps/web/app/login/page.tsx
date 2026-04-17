@@ -13,7 +13,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           <h1>Entre para operar a camara em tempo real.</h1>
           <p className="muted">Use o ambiente demo para cadastrar documentos, processos, usuarios e solicitacoes.</p>
         </div>
-        <form className="form" action="/api/auth/login" method="post">
+        <form className="form" action="/actions/auth/login" method="post">
           {params?.erro ? <p className="alert">Credenciais invalidas. Confira os dados e tente novamente.</p> : null}
           <div className="field">
             <label htmlFor="tenantSlug">Camara</label>

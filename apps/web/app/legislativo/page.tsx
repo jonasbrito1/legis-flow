@@ -41,7 +41,7 @@ export default async function LegislativePage() {
         </header>
 
         <section className="workspace">
-          <form className="panel form-grid" action="/api/legislative/documents" method="post">
+          <form className="panel form-grid" action="/actions/legislative/documents" method="post">
             <h2>Novo documento</h2>
             <div className="field">
               <label htmlFor="type">Tipo</label>
@@ -76,7 +76,7 @@ export default async function LegislativePage() {
             <button className="button" type="submit">Protocolar documento</button>
           </form>
 
-          <form className="panel form-grid" action="/api/legislative/sessions" method="post">
+          <form className="panel form-grid" action="/actions/legislative/sessions" method="post">
             <h2>Nova sessao</h2>
             <div className="field wide">
               <label htmlFor="session-title">Titulo</label>

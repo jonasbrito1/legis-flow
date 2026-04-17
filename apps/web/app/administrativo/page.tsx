@@ -31,7 +31,7 @@ export default async function AdministrativePage() {
         </header>
 
         <section className="workspace">
-          <form className="panel form-grid" action="/api/administrative/processes" method="post">
+          <form className="panel form-grid" action="/actions/administrative/processes" method="post">
             <h2>Novo processo</h2>
             <div className="field wide">
               <label htmlFor="subject">Assunto</label>
@@ -51,7 +51,7 @@ export default async function AdministrativePage() {
             <button className="button" type="submit">Abrir processo</button>
           </form>
 
-          <form className="panel form-grid" action="/api/sectors" method="post">
+          <form className="panel form-grid" action="/actions/sectors" method="post">
             <h2>Novo setor</h2>
             <div className="field wide">
               <label htmlFor="name">Nome</label>

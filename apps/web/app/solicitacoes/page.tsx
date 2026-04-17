@@ -19,7 +19,7 @@ export default async function SolicitationPage({ searchParams }: SolicitationPag
         ) : null}
       </section>
       <section className="public-form">
-        <form className="form" action="/api/esic/requests" method="post">
+        <form className="form" action="/actions/esic/requests" method="post">
           <input type="hidden" name="tenantSlug" value="camara-demo" />
           <div className="field">
             <label htmlFor="requesterName">Nome</label>

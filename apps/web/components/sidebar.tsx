@@ -25,7 +25,7 @@ export function Sidebar() {
           </Link>
         ))}
       </nav>
-      <form action="/api/auth/logout" method="post" className="logout-form">
+      <form action="/actions/auth/logout" method="post" className="logout-form">
         <button type="submit">Sair</button>
       </form>
     </aside>

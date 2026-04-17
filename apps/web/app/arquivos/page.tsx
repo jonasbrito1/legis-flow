@@ -27,7 +27,7 @@ export default async function FilesPage() {
         </header>
 
         <section className="workspace">
-          <form className="panel form-grid" action="/api/files/upload" method="post" encType="multipart/form-data">
+          <form className="panel form-grid" action="/actions/files/upload" method="post" encType="multipart/form-data">
             <h2>Novo arquivo</h2>
             <div className="field wide">
               <label htmlFor="file">Documento</label>

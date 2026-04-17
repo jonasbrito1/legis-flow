@@ -23,7 +23,7 @@ export default async function UsersPage() {
         </header>
 
         <section className="workspace">
-          <form className="panel form-grid" action="/api/users" method="post">
+          <form className="panel form-grid" action="/actions/users" method="post">
             <h2>Novo usuario</h2>
             <div className="field wide">
               <label htmlFor="name">Nome</label>

@@ -69,6 +69,8 @@ Credenciais demo criadas no startup Docker:
 - E-mail: `admin@legisflow.local`
 - Senha: `Admin@123456`
 
+Para demonstracao, abra `http://localhost:3000/login` ou `http://localhost:8080/login`, entre com as credenciais demo e use o menu lateral para navegar pelos modulos.
+
 Portas Docker locais para servicos de apoio:
 
 - PostgreSQL: `localhost:55432`
